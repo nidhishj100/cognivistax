@@ -1,0 +1,87 @@
+"use client"
+
+import { useState } from "react"
+// FIX: Using relative path for SiteHeader/GlowButton/Envelope3D
+import SiteHeader from "@/components/site-header"
+import GlowButton from "@/components/glow-button"
+import Envelope3D from "@/components/envelope-3d" 
+
+// NOTE: This code is for demonstration only. A real production app would use
+// dedicated server actions and not send password data via email.
+
+export default function ContactPage() {
+  const [name, setName] = useState("")
+  const [message, setMessage] = useState("")
+  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = async () => {
+    if (!name.trim() || !message.trim()) return
+    setLoading(true)
+    try {
+      // Calls the central email API route
+      await fetch("/api/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // Sending Contact Form data
+        body: JSON.stringify({ 
+            senderName: name,
+            senderEmail: 'contact_form_submission@example.com', // Placeholder for form sender email
+            subject: 'New Contact Form Message',
+            message: `Name: ${name}\nMessage: ${message}`,
+            type: 'CONTACT'
+        }),
+      })
+      setSent(true)
+      setName("")
+      setMessage("")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-background">
+      <SiteHeader />
+      <section className="mx-auto max-w-3xl px-4 md:px-6 pt-16">
+        <h1 className="text-2xl font-semibold text-primary">Get in Touch with CognivistaX</h1>
+        <div className="mt-4 grid gap-1 text-sm text-foreground">
+          <span className="text-lg font-bold">Nidhish J</span>
+          <span className="mt-2">
+            <strong>📞</strong> 6282350214
+          </span>
+          <span>
+            <strong>📧</strong> nidhishjp123@gmail.com
+          </span>
+        </div>
+
+        <div className="mt-6 rounded-xl border border-primary/20 bg-card p-6 shadow-xl shadow-primary/10 grid gap-3">
+          <div className="grid gap-1.5">
+            <label className="text-sm">Your Name</label>
+            <input
+              className="rounded-md border bg-background px-3 py-2 focus:border-primary focus:shadow-[0_0_12px_theme(colors.primary/60%)]"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+            />
+          </div>
+          <div className="grid gap-1.5">
+            <label className="text-sm">Message</label>
+            <textarea
+              className="min-h-28 rounded-md border bg-background px-3 py-2 focus:border-primary focus:shadow-[0_0_12px_theme(colors.primary/60%)]"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Your question or message..."
+            />
+          </div>
+          <GlowButton onClick={onSubmit} disabled={loading} className="w-full">
+            {loading ? "Sending…" : "Send Message"}
+          </GlowButton>
+        </div>
+      </section>
+
+      {/* Animated 3D envelope opens when sent */}
+      <Envelope3D trigger={sent} /> 
+    </main>
+  )
+}
