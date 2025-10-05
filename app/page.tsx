@@ -5,7 +5,7 @@ import Link from "next/link"
 import SiteHeader from "@/components/site-header"
 import GlowButton from "@/components/glow-button"
 import FloatingMobots from "@/components/floating-mobots" 
-import ParallaxBackground from "@/components/parallax-background" 
+import ParallaxBackground from "@/components/parallax-background"
 
 
 export default function Home() {
@@ -37,7 +37,7 @@ export default function Home() {
         
         {/* Action Buttons */}
         <div className="flex gap-4">
-          <Link href="/login">
+          <Link href="/Login">
             <GlowButton variant="primary" className="!bg-primary/90 text-white shadow-lg">
               Get Started
             </GlowButton>
