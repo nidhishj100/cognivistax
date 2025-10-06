@@ -37,7 +37,7 @@ export default function Home() {
         
         {/* Action Buttons */}
         <div className="flex gap-4">
-          <Link href="/Login">
+          <Link href="/auth">
             <GlowButton variant="primary" className="!bg-primary/90 text-white shadow-lg">
               Get Started
             </GlowButton>

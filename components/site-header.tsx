@@ -6,7 +6,7 @@ import { cn } from "../lib/utils" // Fixed path
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/login", label: "Login/Signup" },
+  { href: "/auth", label: "Login/Signup" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/core", label: "Core Identities" },
   { href: "/resources", label: "Resources" },
