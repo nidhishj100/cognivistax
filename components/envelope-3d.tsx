@@ -1,48 +1,34 @@
-"use client"
+// components/envelope-3d.tsx
+'use client'
+import React from 'react'
+import { motion } from 'framer-motion'
 
-import { useEffect, useState } from "react"
-
-// Simple CSS envelope animation shown after success submit
-export function Envelope3D({ trigger }: { trigger: boolean }) {
-  const [show, setShow] = useState(false)
-  useEffect(() => {
-    if (trigger) {
-      setShow(true)
-      const t = setTimeout(() => setShow(false), 2600)
-      return () => clearTimeout(t)
-    }
-  }, [trigger])
-
-  if (!show) return null
+export default function Envelope3D({ trigger=false }: { trigger?: boolean }) {
+  const variants = {
+    closed: { rotateX: 0, y: 0 },
+    open: { rotateX: -65, y: -12 }
+  }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 backdrop-blur-sm">
-      <div className="relative w-56 h-40 [perspective:800px]">
-        <div className="absolute inset-0 bg-white rounded shadow-2xl" />
-        {/* Flap */}
-        <div
-          className="absolute inset-0 origin-top bg-[oklch(0.97_0_0)] rounded"
-          style={{ transform: "rotateX(0deg)", animation: "openFlap 2.2s ease forwards" }}
-        />
-        {/* Letter */}
-        <div
-          className="absolute inset-3 bg-[oklch(0.98_0_0)] rounded shadow"
-          style={{ transform: "translateY(50%)", animation: "raiseLetter 2s 0.4s ease forwards" }}
-        >
-          <p className="p-4 text-center text-sm">Message sent! We&apos;ll get back soon.</p>
+    <div style={{ display:'flex', justifyContent:'center', marginTop:22 }}>
+      <motion.div
+        initial="closed"
+        animate={trigger ? 'open' : 'closed'}
+        variants={variants}
+        transition={{ type:'spring', stiffness:80, damping:12 }}
+        style={{ width:160, height:110, perspective:400 }}
+      >
+        {/* base envelope */}
+        <div style={{ position:'relative', width:'100%', height:'100%' }}>
+          <div style={{ position:'absolute', inset:0, background:'#0f1114', border:'1px solid rgba(255,255,255,0.05)', borderRadius:8 }} />
+          {/* flap */}
+          <motion.div style={{
+            position:'absolute', width:'100%', height:'60%', top:0, left:0, transformOrigin:'center bottom', borderRadius:8, background: 'linear-gradient(180deg,#1b1d21,#0f1114)'
+          }} />
+          {/* letter peek */}
+          <div style={{ position:'absolute', left:10, right:10, bottom:10, height:60, borderRadius:6, background:'linear-gradient(180deg,#fff,#f3f6ff)' }} />
         </div>
-      </div>
-      <style jsx>{`
-        @keyframes openFlap {
-          0% { transform: rotateX(0); }
-          60% { transform: rotateX(-160deg); }
-          100% { transform: rotateX(-160deg); }
-        }
-        @keyframes raiseLetter {
-          0% { transform: translateY(50%); opacity: 0; }
-          100% { transform: translateY(-30%); opacity: 1; }
-        }
-      `}</style>
+      </motion.div>
     </div>
   )
 }
