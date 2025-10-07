@@ -1,27 +1,25 @@
-// app/layout.tsx
+import type { Metadata } from 'next'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import { AuthProvider } from './providers' // your existing provider
-import ParallaxBackground from '@/components/parallax-background'
-import { AnimatePresence, motion } from 'framer-motion'
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: 'v0 App',
+  description: 'Created with v0',
+  generator: 'v0.app',
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
     <html lang="en">
-      <body>
-        <AuthProvider>
-          <ParallaxBackground />
-          <AnimatePresence mode="wait">
-            <motion.div
-              key="app"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.45 }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
-        </AuthProvider>
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+        {children}
+        <Analytics />
       </body>
     </html>
   )
